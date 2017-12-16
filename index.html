@@ -89,7 +89,7 @@ td {
         <div class='col-xs-12 col-md-6'>
           <div class="input-group">
               <span class="input-group-addon">Type</span>
-              <select class="form-control" id="type" onchange="myFunction()" >
+              <select class="form-control" id="type">
                   <option value="All">ทุกประเภท</option>
                   <option value="1">ที่ดิน</option>
                   <option value="2">ทาวน์เฮ้าส์</option>
@@ -106,23 +106,12 @@ td {
         </div>
         <div class='col-xs-12 col-md-6'>
           <div class="input-group">
-              <span class="input-group-addon">Price</span>
-              <select id="priceMin" class="form-control">
-                  <option value="0">0</option>
-                  <option value="500000">500,000</option>
-                  <option value="1000000">1,000,000</option>
-                  <option value="5000000">5,000,000</option>
-                  <option value="10000000">10,000,000</option>
+              <span class="input-group-addon">Year</span>
+              <select id="Tyear" class="form-control">
+                  <option value="All">ทั้งหมด</option>
+                  <option value="2018">2018</option>
+                  <option value="2017">2017</option>
               </select>
-              <span class="input-group-addon">-</span>
-              <select id="priceMax" class="form-control">
-                <option value="noLimit">No Limit</option>
-                <option value="500000">500,000</option>
-                <option value="1000000">1,000,000</option>
-                <option value="5000000">5,000,000</option>
-                <option value="10000000">10,000,000</option>
-              </select>
-              <span id="searchPrice" class="input-group-addon btn">Search</span>
           </div>
         </div>
       </div><br>
@@ -5585,33 +5574,37 @@ td {
         for(i=0;i<obj.length;i++){
         var iconnode = "img/"+obj[i].type;
           var propType = $("#type option:selected").val();
-            var size = "";
-            if(obj[i].sqm == 0){
-              size = "(" + obj[i].rai + "-" + obj[i].ngan + "-" + obj[i].sqw + " ตร.ว.)";
-            }
-            else{
-              size = "(" +obj[i].sqm + " ตร.ม.)";
-            }
-            //if type = all show all type
-            if(propType == 'All'){
-              propType = obj[i].typeID;
-            }
-            if(propType == obj[i].typeID){
-              //set content for each marker
-              content = '<div class="image"><img src="'+ imgPath + obj[i].propID + '.jpg" width="240"/><div class="text">'+ obj[i].type + ' ' + size + ' ' +  obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province + ' ' +'<a href="https://maps.google.com?saddr=Current+Location&daddr='+ obj[i].lat +','+ obj[i].lng +'">Get Direction</a><a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">more</a></div></div>';
-              content += '<table id="myTable'+ obj[i].propID +'" class="bid-offer"><thead><th>ราคา</th><th>' + (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th></thead><tbody>';
-            //content += '<tr><td>ขนาด</td><td>'+ size +'</td></tr>';
-            //content += '<tr><td>ราคา</td><td><b>'+ (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</b></td></tr>';
-              content += '<tr><td>วันที่ซื้อขาย</td><td>'+ formatDate(obj[i].tdate) +'</td></tr>';
-            //content += '<tr><td>ที่ตั้ง</td><td>'+ obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province +'</td></tr>';
-              content += '<tr><td>เลขที่โฉนด</td><td>'+ obj[i].deedNumber +'</td></tr>';
-              content += '<tr><td>อำเภอในโฉนด</td><td>'+ obj[i].deeddistrict +'</td></tr>';
-              content += '<tr><td>ราคาประเมินวันที่ซื้อ</td><td>'+ (obj[i].landEstimatePrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td></tr>';
-              content += '<tr><td>ที่มา</td><td>'+ obj[i].source +'</td></tr>';
-              content += '</tbody></table>';
-              //****if projectname = no add maker if not delay
-              //if(propType == iconnode){
-          var lat = obj[i].lat;
+          var propYear = $("#Tyear option:selected").val();
+          var size = "";
+          if(obj[i].sqm == 0){
+            size = "(" + obj[i].rai + "-" + obj[i].ngan + "-" + obj[i].sqw + " ตร.ว.)";
+          }
+          else{
+            size = "(" +obj[i].sqm + " ตร.ม.)";
+          }
+          //if type = all show all type
+          if(propType == 'All'){
+            propType = obj[i].typeID;
+          }
+          if(propYear == 'All'){
+            propYear = returnYear(obj[i].tdate);
+          }
+          if((propType == obj[i].typeID) && (propYear == returnYear(obj[i].tdate))){
+            //set content for each marker
+            content = '<div class="image"><img src="'+ imgPath + obj[i].propID + '.jpg" width="240"/><div class="text">'+ obj[i].type + ' ' + size + ' ' +  obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province + ' ' +'<a href="https://maps.google.com?saddr=Current+Location&daddr='+ obj[i].lat +','+ obj[i].lng +'">Get Direction</a><a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">more</a></div></div>';
+            content += '<table id="myTable'+ obj[i].propID +'" class="bid-offer"><thead><th>ราคา</th><th>' + (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th></thead><tbody>';
+          //content += '<tr><td>ขนาด</td><td>'+ size +'</td></tr>';
+          //content += '<tr><td>ราคา</td><td><b>'+ (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</b></td></tr>';
+            content += '<tr><td>วันที่ซื้อขาย</td><td>'+ formatDate(obj[i].tdate) +'</td></tr>';
+          //content += '<tr><td>ที่ตั้ง</td><td>'+ obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province +'</td></tr>';
+            content += '<tr><td>เลขที่โฉนด</td><td>'+ obj[i].deedNumber +'</td></tr>';
+            content += '<tr><td>อำเภอในโฉนด</td><td>'+ obj[i].deeddistrict +'</td></tr>';
+            content += '<tr><td>ราคาประเมินวันที่ซื้อ</td><td>'+ (obj[i].landEstimatePrice).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</td></tr>';
+            content += '<tr><td>ที่มา</td><td>'+ obj[i].source +'</td></tr>';
+            content += '</tbody></table>';
+            //****if projectname = no add maker if not delay
+            //if(propType == iconnode){
+            var lat = obj[i].lat;
             var lng = obj[i].lng;
             latlngset = new google.maps.LatLng(lat, lng);
             marker = new google.maps.Marker({  
@@ -5638,99 +5631,64 @@ td {
         };
         markerCluster = new MarkerClusterer(map, gmarkers,mcOptions);
   }
-  function myFunction() {
-      var x = document.getElementById("mySelect").value;
-  removeMarkers();
-  addMarkers();
-}
-function removeMarkers(){
-    for(i=0; i<gmarkers.length; i++){
-        gmarkers[i].setMap(null);
-    }
-   gmarkers = [];
-   markerCluster.clearMarkers();
-}
-  
-    
 
-  $("#searchPrice").click(function(e){
-    e.preventDefault();
-    pricemin = document.getElementById("priceMin").value;
-    pricemax = document.getElementById("priceMax").value;
-    if(pricemax == "noLimit"){
-      pricemax = 10000000000;
-    }
-    removeMarkers();
-    addMarkers();
-  });
+  function removeMarkers(){
+      for(i=0; i<gmarkers.length; i++){
+          gmarkers[i].setMap(null);
+      }
+     gmarkers = [];
+     markerCluster.clearMarkers();
+  }
+  //Clear Text Input box
   $("#clear").click(function(e) {
-    $("#searchLocation").val('');
-    $('#searchLocation').focus();
-  });
-    $( "#type" ).on('change', function() {
+      $("#searchLocation").val('');
+      $('#searchLocation').focus();
+    });
+  $( "#type" ).on('change', function() {
       removeMarkers();
       addMarkers();
   });
-  function myFunction1(elem){
-    var index = obj.map(function(e) { return e.id; }).indexOf(parseInt(elem.id));
-    var bidp = document.getElementById("s_location"+elem.id).value;
-    var maxloop;
-    if(obj[index].bid.length > Maxbid){
-        maxloop = Maxbid;
-    }else{
-      maxloop = obj[index].bid.length;
-    }
-    obj[index].bid.push(bidp);
-    //get index of id use "obj.map(function(e) { return e.id; }).indexOf(15);" where 15 is an id
-    //store sorted bid price in array
-    var sortedbid = obj[index].bid.sort(sortNumber);
-    for(i=0;i<maxloop;i++){  
-      document.getElementById("myTable"+elem.id).rows[i+1].cells[0].innerHTML = sortedbid[i].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-    }
-    //$("#myTable"+elem.id).append("<tr><td>"+sortedbid[maxloop].toLocaleString()+"</td><td></td></tr>");
-    if(maxloop < 3){
-      $("#myTable"+elem.id).append("<tr><td>"+sortedbid[maxloop].toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"</td><td></td></tr>");
-    }
-    //$("#myTable"+elem.id+" > tbody").append("<tr><td align='center'>"+bidp.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")+"</td></tr>");
-    if(obj[index].offer <= parseInt(bidp)) {
-      gmarkers[index].setMap(null);
-      $("#suc").text("คุณได้ทำการซื้ออสังหาชิ้นนี้แล้ว");
-    }
-  }//end function
+
+  $( "#Tyear" ).on('change', function() {
+    removeMarkers();
+    addMarkers();
+  });
   function myLocation(){
     if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(function(position) {
-        var pos = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
-        };
-        map.setCenter(pos);
-      }, function() {
-        alert("Error: The Geolocation service failed.");
-      });
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+          };
+          map.setCenter(pos);
+        }, function() {
+          alert("Error: The Geolocation service failed.");
+        });
     } 
     else {
-      // Browser doesn't support Geolocation
-      alert("Browser doesn't support Geolocation");
+        // Browser doesn't support Geolocation
+        alert("Browser doesn't support Geolocation");
     }
   }//end function
-  //sort number in array json
-  function sortNumber(a,b) {
-      return b - a;
-  }
   function formatDate(date) {
-        var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
+      var d = new Date(date),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
 
-        if (month.length < 2) month = '0' + month;
-        if (day.length < 2) day = '0' + day;
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
 
-        return [day, month, year].join('-');
-      }
+      return [day, month, year].join('-');
+  }
+  function returnYear(date) {
+      var d = new Date(date),
+          year = d.getFullYear();
 
-    </script>
+      return year;
+  }
+
+</script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
 <script src="js/markerclusterer.js"></script>
