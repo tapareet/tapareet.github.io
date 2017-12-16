@@ -5591,7 +5591,7 @@ td {
           }
           if((propType == obj[i].typeID) && (propYear == returnYear(obj[i].tdate))){
             //set content for each marker
-            content = '<div class="image"><img src="'+ imgPath + obj[i].propID + '.jpg" width="240"/><div class="text">'+ obj[i].type + ' ' + size + ' ' +  obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province + ' ' +'<a href="https://maps.google.com?saddr=Current+Location&daddr='+ obj[i].lat +','+ obj[i].lng +'">Get Direction</a><a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">more</a></div></div>';
+            content = '<div class="image"><img src="'+ imgPath + obj[i].propID + '.jpg" width="200"/><div class="text">'+ obj[i].type + ' ' + size + ' ' +  obj[i].subdistrict + ' ' + obj[i].district + ' ' + obj[i].province + ' ' +'<a href="https://maps.google.com?saddr=Current+Location&daddr='+ obj[i].lat +','+ obj[i].lng +'">Get Direction</a><a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">more</a></div></div>';
             content += '<table id="myTable'+ obj[i].propID +'" class="bid-offer"><thead><th>ราคา</th><th>' + (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + '</th></thead><tbody>';
           //content += '<tr><td>ขนาด</td><td>'+ size +'</td></tr>';
           //content += '<tr><td>ราคา</td><td><b>'+ (obj[i].price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") +'</b></td></tr>';
