@@ -10725,6 +10725,8 @@ td {
 }
 ];
     var marker,i,content;
+        var projectContent = "";
+        var CurrentProject = 2;
         for(i=0;i<obj.length;i++){
           var iconnode = "img/"+obj[i].type;
           var propType = $("#type option:selected").val();
@@ -10758,8 +10760,28 @@ td {
             content += '</tbody></table>';
             //****if projectname = no add maker if not delay
             //if(propType == iconnode){
+            if(obj[i].projectID > 1){
+                //content = "<div class='text-center'>" + obj[i].projectName + "</div><br>" + content;
+                if(obj[i].projectID == CurrentProject){
+                  projectContent = projectContent + "<br><br>" + content;
+                }
+                else if(obj[i].projectID > CurrentProject){
+                  CurrentProject++;
+                  projectContent = "";
+                  projectContent = "<div class='text-center'>" + obj[i].projectName + "</div><br>" + projectContent + content;
+                }
+                if(projectContent != ""){
+                  content = projectContent;
+                }
+
+              }
             var lat = obj[i].lat;
             var lng = obj[i].lng;
+            //if property in project use project location
+            if(obj[i].projectID > 1){
+              lat = obj[i].ProjectLat;
+              lng = obj[i].ProjectLng;
+            }
             latlngset = new google.maps.LatLng(lat, lng);
             marker = new google.maps.Marker({  
                 map: map, title: 'Hello' , position: latlngset  , icon: iconnode+'.png'
